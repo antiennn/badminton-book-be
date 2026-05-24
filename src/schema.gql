@@ -1,0 +1,41 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: ID!
+  auth0Id: String!
+  email: String!
+  name: String!
+  avatar: String
+  profileCompleted: Boolean!
+  level: String
+  availableDays: [String!]!
+  availableTimes: [String!]!
+  expectedPrice: Float
+  reputationScore: Float!
+}
+
+type Query {
+  users: [User!]!
+  me: User!
+}
+
+type Mutation {
+  updateProfile(input: UpdateProfileInput!): User!
+  syncUser(input: LoginInput!): User!
+}
+
+input UpdateProfileInput {
+  level: String!
+  availableDays: [String!]!
+  availableTimes: [String!]!
+  expectedPrice: Int!
+}
+
+input LoginInput {
+  auth0Id: String!
+  email: String!
+  name: String!
+  picture: String!
+}
