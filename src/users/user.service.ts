@@ -17,41 +17,34 @@ export class UserService {
   }
 
   async findOrCreate(authUser: any) {
-    let user =
-      await this.userModel.findOne({
-        auth0Id: authUser.sub,
-      });
+    let user = await this.userModel.findOne({
+      auth0Id: authUser.sub,
+    });
 
     if (!user) {
-      user =
-        await this.userModel.create({
-          auth0Id: authUser.sub,
+      user = await this.userModel.create({
+        auth0Id: authUser.sub,
 
-          email: authUser.email,
+        email: authUser.email,
 
-          name:
-            authUser.name ||
-            authUser.nickname,
+        name: authUser.name || authUser.nickname,
 
-          avatar: authUser.picture,
+        avatar: authUser.picture,
 
-          profileCompleted: false,
+        profileCompleted: false,
 
-          reputationScore: 100,
+        reputationScore: 100,
 
-          availableDays: [],
+        availableDays: [],
 
-          availableTimes: [],
-        });
+        availableTimes: [],
+      });
     }
 
     return user;
   }
 
-  async updateProfile(
-    auth0Id: string,
-    input: UpdateProfileInput,
-  ) {
+  async updateProfile(auth0Id: string, input: UpdateProfileInput) {
     return this.userModel.findOneAndUpdate(
       {
         auth0Id,
@@ -68,47 +61,54 @@ export class UserService {
   }
 
   async syncUser(input: any) {
+    const avatar = input.avatar ?? input.picture ?? null;
 
-    let user =
-      await this.userModel.findOne({
-        auth0Id:
-          input.auth0Id,
-      });
+    let user = await this.userModel.findOne({
+      auth0Id: input.auth0Id,
+    });
 
     if (!user) {
+      user = await this.userModel.create({
+        auth0Id: input.auth0Id,
 
-      user =
-        await this.userModel.create({
-          auth0Id:
-            input.auth0Id,
+        email: input.email,
 
-          email:
-            input.email,
+        name: input.name,
 
-          name:
-            input.name,
+        avatar,
 
-          avatar:
-            input.picture,
+        expectedPrice: undefined,
 
-          profileCompleted:
-            false,
-        });
+        gender: undefined,
+
+        profileCompleted: false,
+      });
 
       return user;
     }
 
-    user.email =
-      input.email;
+    user.email = input.email;
 
-    user.name =
-      input.name;
+    user.name = input.name;
 
-    user.avatar =
-      input.picture;
+    user.avatar = avatar;
 
     await user.save();
 
     return user;
+  }
+
+  async findByAuth0Id(auth0Id: string) {
+    return this.userModel.findOne({
+      auth0Id,
+    });
+  }
+
+  async findByAuth0Ids(auth0Ids: string[]) {
+    return this.userModel.find({
+      auth0Id: {
+        $in: auth0Ids,
+      },
+    });
   }
 }

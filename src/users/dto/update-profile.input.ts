@@ -17,4 +17,7 @@ export class UpdateProfileInput {
 
   @Field(() => Int)
   expectedPrice!: number;
+
+  @Field(() => String)
+  gender !: string;
 }

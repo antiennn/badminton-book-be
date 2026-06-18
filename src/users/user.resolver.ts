@@ -25,7 +25,6 @@ export class UserResolver {
   async me(
     @CurrentUser() user: any,
   ) {
-    console.log(user);
     return this.userService.findOrCreate(
       user,
     );

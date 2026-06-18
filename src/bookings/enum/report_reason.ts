@@ -1,0 +1,13 @@
+export enum ReportReason {
+  NO_SHOW = "NO_SHOW",
+
+  LATE = "LATE",
+
+  BAD_BEHAVIOR = "BAD_BEHAVIOR",
+
+  OFFENSIVE_LANGUAGE = "OFFENSIVE_LANGUAGE",
+
+  FAKE_LEVEL = "FAKE_LEVEL",
+
+  OTHER = "OTHER",
+}

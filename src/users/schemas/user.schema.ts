@@ -30,7 +30,7 @@ export class User {
   @Field({
     nullable: true,
   })
-  avatar?: string;
+  avatar!: string;
 
   @Prop({
     default: false,
@@ -61,19 +61,26 @@ export class User {
   availableTimes!: string[];
 
   @Prop({
+    default: 100,
+  })
+  @Field()
+  reputationScore!: number;
+
+  @Prop({
+    nullable: true,
+  })
+  @Field({
+    nullable: true,
+  })
+  gender?: string;
+
+  @Prop({
     nullable: true,
   })
   @Field({
     nullable: true,
   })
   expectedPrice?: number;
-
-  @Prop({
-    default: 100,
-  })
-  @Field()
-  reputationScore!: number;
-  
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

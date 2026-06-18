@@ -12,18 +12,82 @@ type User {
   level: String
   availableDays: [String!]!
   availableTimes: [String!]!
-  expectedPrice: Float
   reputationScore: Float!
+  gender: String
+  expectedPrice: Float
+}
+
+type BookingParticipant {
+  _id: ID!
+  bookingId: String!
+  userId: String!
+  gender: String!
+  level: String!
+  status: ParticipantStatus!
+  message: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User
+  booking: Booking
+}
+
+enum ParticipantStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  LEFT
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Booking {
+  _id: ID!
+  maleLevelRequired: [String!]!
+  femaleLevelRequired: [String!]!
+  maleRequired: Float!
+  femaleRequired: Float!
+  startTime: String!
+  endTime: String!
+  day: String!
+  malePrice: Float!
+  femalePrice: Float!
+  address: String!
+  longitude: Float!
+  latitude: Float!
+  facilities: [String!]!
+  userId: String!
+  maleJoined: Float!
+  femaleJoined: Float!
+  participants: [BookingParticipant!]
+  owner: User
+}
+
+type MyJoinedBookingsResponse {
+  upcoming: [BookingParticipant!]!
+  pending: [BookingParticipant!]!
+  history: [BookingParticipant!]!
 }
 
 type Query {
   users: [User!]!
   me: User!
+  bookings(day: String, longitude: Float, latitude: Float, withinKm: Float, page: Int = 1, limit: Int = 10): [Booking!]!
+  myBookings: [Booking!]!
+  booking(id: ID!): Booking
+  myJoinedBookings: MyJoinedBookingsResponse!
 }
 
 type Mutation {
   updateProfile(input: UpdateProfileInput!): User!
   syncUser(input: LoginInput!): User!
+  createBooking(input: CreateBookingInput!): Booking!
+  joinBooking(input: JoinBookingInput!): BookingParticipant!
+  acceptParticipant(bookingId: String!, participantId: String!): BookingParticipant!
+  rejectParticipant(bookingId: String!, participantId: String!): BookingParticipant!
 }
 
 input UpdateProfileInput {
@@ -31,11 +95,33 @@ input UpdateProfileInput {
   availableDays: [String!]!
   availableTimes: [String!]!
   expectedPrice: Int!
+  gender: String!
 }
 
 input LoginInput {
   auth0Id: String!
   email: String!
   name: String!
-  picture: String!
+  avatar: String!
+}
+
+input CreateBookingInput {
+  maleLevelRequired: [String!]!
+  femaleLevelRequired: [String!]!
+  maleRequired: Float!
+  femaleRequired: Float!
+  startTime: String!
+  endTime: String!
+  day: String!
+  malePrice: Float!
+  femalePrice: Float!
+  address: String!
+  longitude: Float!
+  latitude: Float!
+  facilities: [String!]!
+}
+
+input JoinBookingInput {
+  bookingId: ID!
+  message: String
 }

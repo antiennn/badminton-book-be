@@ -16,5 +16,5 @@ export class LoginInput {
   name!: string;
 
   @Field()
-  picture!: string;
+  avatar!: string;
 }
