@@ -13,7 +13,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin:
-      ['http://localhost:5000', 'https://badminton-book-fe.vercel.app/'],
+      ['http://localhost:5000', 'https://badminton-book-fe.vercel.app'],
     credentials: true,
   });
 
